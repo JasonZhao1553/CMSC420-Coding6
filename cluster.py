@@ -67,5 +67,11 @@ class Graph():
         # Replace the next two lines with your code.
         pind = []
         nind = []
+        fvec = self.fiedlervector()
+        for node_index, val in enumerate(fvec):
+            if val < 0:
+                nind.append(node_index)
+            else:
+                pind.append(node_index)
         # Return
         return([pind,nind])
