@@ -11,13 +11,28 @@ class Graph():
         # IMPORTANT!!!
         # Replace the next line so the Laplacian is a nodecount x nodecount array of zeros.
         # You will need to do this in order for the code to run!
-        self.laplacian = 1
+        self.A = np.zeros((nodecount, nodecount))
+        self.D = np.zeros((nodecount, nodecount))
+        self.laplacian = np.zeros((nodecount, nodecount))
 
     # Add an edge to the Laplacian matrix.
     # An edge is a pair [x,y].
     def addedge(self,edge):
         # Your code goes here.
-        print('Filler code...')
+        x = edge[0]
+        y = edge[1]
+        
+        if self.A[x][y] == 1:
+            return
+        
+        else:
+            self.A[x][y] = 1
+            self.A[y][x] = 1
+
+            self.D[x][x] += 1
+            self.D[y][y] += 1
+
+            self.laplacian = self.D - self.A
         # Nothing to return.
 
     # Don't change this - no need.
@@ -30,8 +45,17 @@ class Graph():
     # If not, negate the whole thing.
     def fiedlervector(self) -> np.array:
         # Replace this next line with your code.
-        fvec = [0]
-        # Return
+        eigenvalues, eigenvectors = np.linalg.eig(self.laplacian)
+        sorted_indices = np.argsort(eigenvalues)
+        sorted_eigenvalues = eigenvalues[sorted_indices]
+        sorted_eigenvectors = eigenvectors[:, sorted_indices]
+
+        fvalue = sorted_eigenvalues[1]
+        fvec = sorted_eigenvectors[:, 1]
+
+        if fvec[0] < 0:
+            return fvec * -1
+        
         return fvec
 
     # Cluster the nodes.
